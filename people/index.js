@@ -1,6 +1,7 @@
 const express = require('express');
 const Podlet = require('@podium/podlet');
 const cors = require('cors');
+const fetch = require('node-fetch');
 
 const app = express();
 
@@ -17,9 +18,13 @@ app.use(podlet.middleware());
 app.use(cors());
 
 app.get(podlet.content(), (req, res) => {
+
     res.status(200).podiumSend(`
         <div>
           <h1>People page</h1>
+          <div id="people-list">
+          <p>Loading people info, please wait...</p>
+          </div>
         </div>
     `);
 });
@@ -30,6 +35,7 @@ app.get(podlet.manifest(), (req, res) => {
 
 app.use(express.static(__dirname + '/assets'));
 podlet.css({ value: '/css/styles.css' });
+podlet.js({ value: '/js/main.js' });
 
 app.listen(3002);
 console.log('People pod listening on: 3002');

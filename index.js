@@ -7,6 +7,7 @@ const app = express();
 const layout = new Layout({
   name: 'myLayout',
   pathname: '/',
+  logger: console
 });
 
 layout.view(
@@ -16,6 +17,7 @@ layout.view(
       <meta charset="utf-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1" />
       <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+      <link href="/css/styles.css" rel="stylesheet">
       ${incoming.css.map(utils.buildLinkElement).join("\n")}
       <title>${incoming.view.title}</title>
     </head>
@@ -67,6 +69,7 @@ app.get('/people', async (req, res) => {
   incoming.view.title = 'Starwars - People';
 
   incoming.css = [...navbar.css, ...people.css];
+  incoming.js = [...people.js];
   res.podiumSend(`<div>
     ${navbar}
     ${people}
@@ -88,5 +91,9 @@ app.get('/planets', async (req, res) => {
     ${planets}
     </div>`);
 });
+
+
+app.use(express.static(__dirname + '/assets'));
+
 app.listen(3000);
 console.log('root app listening on port: 3000');
