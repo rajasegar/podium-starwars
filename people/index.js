@@ -1,7 +1,6 @@
 const express = require('express');
 const Podlet = require('@podium/podlet');
 const cors = require('cors');
-const fetch = require('node-fetch');
 
 const app = express();
 
@@ -22,6 +21,7 @@ app.get(podlet.content(), (req, res) => {
     res.status(200).podiumSend(`
         <div>
           <h1>People page</h1>
+          <a href="/planets">Planets page</a>
           <div id="people-list">
           <p>Loading people info, please wait...</p>
           </div>

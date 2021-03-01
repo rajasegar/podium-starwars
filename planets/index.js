@@ -1,12 +1,12 @@
 const express = require('express');
 const Podlet = require('@podium/podlet');
-const fetch = require('node-fetch');
+const cors = require('cors');
 
 const app = express();
 
 const podlet = new Podlet({
     name: 'planetPod',
-    version: '1.0.0',
+    version: '1.0.2',
     pathname: '/',
     content: '/',
     fallback: '/fallback',
@@ -14,17 +14,14 @@ const podlet = new Podlet({
 });
 
 app.use(podlet.middleware());
+app.use(cors());
 
-app.get(podlet.content(),  async (req, res) => {
-  const response = await fetch('https://swapi.dev/api/planets');
-  const data = await response.json();
-  const planets = data.results.map(p => `<li>${p.name}</li>`).join('\n');
+app.get(podlet.content(),  (req, res) => {
     res.status(200).podiumSend(`
         <div>
           <h1>Planets page</h1>
-          <ul>
-          ${planets}
-          </ul>
+          <div id="planets-list">
+          <p>Loading planets info, please wait...</p>
         </div>
     `);
 });
@@ -38,6 +35,11 @@ app.get(podlet.fallback(), (req, res) => {
   <h1>Planets info not available</h1>
   `);
 });
+
+app.use(express.static(__dirname + '/assets'));
+podlet.css({ value: '/css/styles.css' });
+podlet.js({ value: '/js/index.js' });
+
 
 app.listen(3003);
 

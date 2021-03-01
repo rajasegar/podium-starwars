@@ -56,6 +56,7 @@ app.get('/', async (req, res) => {
   res.podiumSend(`<div>
     ${navbar}
     <h1>Micro-Frontends using Podium</h1>
+    <h2>Server side composition</h1>
     </div>`);
 });
 
@@ -85,7 +86,8 @@ app.get('/planets', async (req, res) => {
 
   incoming.view.title = 'Starwars - Planets';
 
-  incoming.css = navbar.css;
+  incoming.css = [...navbar.css, ...planets.css];
+  incoming.js = [...planets.js];
   res.podiumSend(`<div>
     ${navbar}
     ${planets}
